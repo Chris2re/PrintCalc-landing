@@ -1,297 +1,210 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0b1220" />
-  <title>PrintCalc — 3D Print Cost Calculator</title>
-  <meta name="description" content="PrintCalc helps you calculate the real cost of 3D prints in seconds — filament, electricity, machine time, labor, and shipping." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PrintCalc – 3D Print Cost Calculator</title>
 
-  <!-- Open Graph (nice link previews) -->
-  <meta property="og:title" content="PrintCalc — 3D Print Cost Calculator" />
-  <meta property="og:description" content="Calculate the real cost of 3D prints in seconds." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="og.png" />
-  <meta property="og:url" content="https://YOUR_GITHUB_PAGES_URL_HERE" />
+<meta name="description" content="Calculate the real cost of 3D prints in seconds. Filament, electricity, machine time, labor and shipping.">
 
-  <style>
-    :root{
-      --bg:#070b14;
-      --panel:#0b1220;
-      --muted:#a9b3c7;
-      --text:#eef3ff;
-      --line:rgba(255,255,255,.10);
-      --shadow: 0 18px 60px rgba(0,0,0,.55);
-      --radius: 22px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--text);
-      background:
-        radial-gradient(900px 600px at 20% 0%, rgba(75,100,255,.22), transparent 55%),
-        radial-gradient(900px 600px at 80% 10%, rgba(0,220,255,.18), transparent 55%),
-        radial-gradient(1200px 800px at 50% 110%, rgba(90,40,255,.12), transparent 55%),
-        var(--bg);
-      min-height:100vh;
-    }
-    a{color:inherit}
-    .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 60px}
-    header{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:14px;padding:10px 0 24px;
-    }
-    .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
-    .logo{
-      width:44px;height:44px;border-radius:14px;
-      background:linear-gradient(135deg, rgba(105,135,255,.95), rgba(0,220,255,.75));
-      display:grid;place-items:center;
-      box-shadow: 0 10px 30px rgba(0,0,0,.45);
-      overflow:hidden;
-    }
-    .logo img{width:100%;height:100%;object-fit:cover}
-    .brand h1{font-size:16px;margin:0;letter-spacing:.2px}
-    .brand p{margin:0;color:var(--muted);font-size:12px}
-    .toplinks{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .chip{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      padding:10px 12px;border-radius:999px;
-      text-decoration:none;font-size:13px;color:var(--muted);
-    }
-    .chip:hover{background:rgba(255,255,255,.07);color:var(--text)}
-    .hero{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:18px;
-      align-items:stretch;
-    }
-    @media (max-width: 900px){
-      .hero{grid-template-columns: 1fr; }
-      .toplinks{justify-content:flex-start}
-    }
-    .card{
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .pad{padding:22px}
-    .kicker{
-      display:inline-flex;align-items:center;gap:8px;
-      color:var(--muted);
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      padding:8px 12px;border-radius:999px;
-      font-size:13px;
-    }
-    .headline{font-size:44px;line-height:1.05;margin:14px 0 12px}
-    @media (max-width: 540px){ .headline{font-size:34px} }
-    .sub{color:var(--muted);font-size:16px;line-height:1.6;margin:0 0 18px}
-    .bullets{display:grid;gap:10px;margin:18px 0 22px;padding:0;list-style:none}
-    .bullets li{
-      display:flex;gap:10px;align-items:flex-start;
-      color:#dbe6ff;
-    }
-    .dot{
-      width:10px;height:10px;border-radius:999px;margin-top:7px;
-      background:linear-gradient(135deg, rgba(105,135,255,.95), rgba(0,220,255,.75));
-      flex:0 0 auto;
-    }
-    .ctaRow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:12px 16px;border-radius:14px;
-      border:1px solid var(--line);
-      text-decoration:none;
-      font-weight:650;
-      background:rgba(255,255,255,.06);
-    }
-    .btn:hover{background:rgba(255,255,255,.10)}
-    .btnPrimary{
-      background:linear-gradient(135deg, rgba(105,135,255,.95), rgba(0,220,255,.85));
-      color:#061022;border:none;
-    }
-    .btnPrimary:hover{filter:brightness(1.02)}
-    .fine{color:var(--muted);font-size:12px;margin:10px 0 0}
-    .phone{
-      display:grid;place-items:center;
-      padding:18px;
-      background:
-        radial-gradient(600px 400px at 50% 10%, rgba(255,255,255,.10), transparent 60%),
-        rgba(255,255,255,.03);
-    }
-    .mock{
-      width:min(320px, 100%);
-      aspect-ratio: 9/18.5;
-      border-radius:34px;
-      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
-      border:1px solid rgba(255,255,255,.12);
-      position:relative;
-      overflow:hidden;
-      box-shadow: 0 25px 70px rgba(0,0,0,.60);
-    }
-    .mock .notch{
-      position:absolute;top:10px;left:50%;transform:translateX(-50%);
-      width:38%;height:18px;border-radius:999px;
-      background:rgba(0,0,0,.35);
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .mock .shot{
-      position:absolute;inset:18px 14px 14px;
-      border-radius:28px;
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.10);
-      display:grid;place-items:center;
-      color:rgba(255,255,255,.55);
-      font-size:13px;
-      text-align:center;
-      padding:18px;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-      margin-top:18px;
-    }
-    @media (max-width: 900px){ .grid{grid-template-columns: 1fr} }
-    .mini h3{margin:0 0 6px;font-size:16px}
-    .mini p{margin:0;color:var(--muted);line-height:1.55;font-size:14px}
-    footer{
-      margin-top:26px;
-      color:var(--muted);
-      font-size:13px;
-      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
-      border-top:1px solid var(--line);
-      padding-top:18px;
-    }
-  </style>
+<style>
+
+body{
+margin:0;
+font-family:system-ui,-apple-system,Segoe UI,Roboto;
+background:#0a0f1f;
+color:white;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:40px 20px;
+}
+
+.hero{
+text-align:center;
+padding:60px 0;
+}
+
+h1{
+font-size:48px;
+margin-bottom:15px;
+}
+
+.subtitle{
+font-size:20px;
+opacity:.8;
+max-width:600px;
+margin:auto;
+line-height:1.5;
+}
+
+.download{
+display:inline-block;
+margin-top:30px;
+background:linear-gradient(135deg,#5b7cff,#00d4ff);
+color:#081025;
+padding:16px 28px;
+border-radius:12px;
+font-weight:700;
+text-decoration:none;
+font-size:18px;
+}
+
+.download:hover{
+transform:scale(1.05);
+}
+
+.screenshots{
+display:flex;
+gap:25px;
+justify-content:center;
+flex-wrap:wrap;
+margin-top:60px;
+}
+
+.phone{
+width:260px;
+border-radius:35px;
+overflow:hidden;
+box-shadow:0 20px 60px rgba(0,0,0,.6);
+border:1px solid rgba(255,255,255,.1);
+}
+
+.phone img{
+width:100%;
+display:block;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+margin-top:80px;
+}
+
+.feature{
+background:rgba(255,255,255,.03);
+padding:25px;
+border-radius:15px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.feature h3{
+margin-top:0;
+}
+
+.cta{
+text-align:center;
+margin-top:80px;
+}
+
+footer{
+text-align:center;
+opacity:.6;
+font-size:14px;
+margin-top:80px;
+}
+
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <header>
-      <a class="brand" href="#">
-        <div class="logo" aria-hidden="true">
-          <!-- Optional: place your icon file as "icon.png" next to index.html -->
-          <img src="icon.png" alt="" onerror="this.style.display='none'; this.parentElement.textContent='PC'; this.parentElement.style.color='#061022'; this.parentElement.style.fontWeight='800';" />
-        </div>
-        <div>
-          <h1>PrintCalc</h1>
-          <p>3D print cost calculator</p>
-        </div>
-      </a>
 
-      <nav class="toplinks">
-        <a class="chip" href="#features">Features</a>
-        <a class="chip" href="#faq">FAQ</a>
-        <a class="chip" href="mailto:post@jhmultiservice.no">Contact</a>
-      </nav>
-    </header>
+<div class="container">
 
-    <section class="hero">
-      <div class="card pad">
-        <div class="kicker">📦 Filament • ⚡ Power • 🕒 Time • 👷 Labor</div>
-        <h2 class="headline">Stop guessing your 3D printing prices.</h2>
-        <p class="sub">
-          PrintCalc helps you calculate the real cost of every 3D print in seconds — including filament,
-          electricity, machine time, labor, and shipping.
-        </p>
+<div class="hero">
 
-        <ul class="bullets" id="features">
-          <li><span class="dot"></span><span>Fast and clear calculations — perfect for quotes and orders.</span></li>
-          <li><span class="dot"></span><span>Includes machine time, power cost, labor, and shipping — not just filament.</span></li>
-          <li><span class="dot"></span><span>Built for makers and small 3D printing businesses.</span></li>
-        </ul>
+<h1>Stop guessing your<br>3D printing prices</h1>
 
-        <div class="ctaRow">
-          <a class="btn btnPrimary" id="downloadBtn" href="https://apps.apple.com/us/app/printcalc/id6757921539" target="_blank" rel="noopener"> Download on the App Store
-          </a>
-          <a class="btn" href="https://chris2re.github.io/printcalc-support/" target="_blank" rel="noopener">
-            Support page
-          </a>
-        </div>
-        <p class="fine">No account. No fluff. Just the numbers you actually need.</p>
-      </div>
+<p class="subtitle">
+PrintCalc helps you calculate the real cost of every 3D print in seconds —
+including filament, electricity, machine time, labor and shipping.
+</p>
 
-      <div class="card phone">
-        <div class="mock" aria-label="App preview">
-          <div class="notch" aria-hidden="true"></div>
-            <div class="shot">
-              <img src="screen1.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<a id="downloadBtn"
+class="download"
+href="https://apps.apple.com/us/app/printcalc/id6757921539"
+target="_blank">
+Download on the App Store
+</a>
 
-    <section class="grid" style="margin-top:18px;">
-      <div class="card pad mini">
-        <h3>Accurate quotes</h3>
-        <p>Know what your prints actually cost before you accept a job.</p>
-      </div>
-      <div class="card pad mini">
-        <h3>Professional pricing</h3>
-        <p>Include all the hidden costs that eat your profit over time.</p>
-      </div>
-      <div class="card pad mini">
-        <h3>Made for speed</h3>
-        <p>Quick inputs, clean output, and less time fiddling with spreadsheets.</p>
-      </div>
-    </section>
+</div>
 
-    <section class="card pad" id="faq" style="margin-top:18px;">
-      <h3 style="margin:0 0 10px;">FAQ</h3>
-      <div style="display:grid; gap:12px;">
-        <div>
-          <div style="font-weight:700;">Does it include electricity and machine time?</div>
-          <div style="color:var(--muted); line-height:1.6;">Yes — power cost and machine time are core parts of the calculation.</div>
-        </div>
-        <div>
-          <div style="font-weight:700;">Who is PrintCalc for?</div>
-          <div style="color:var(--muted); line-height:1.6;">Makers, hobbyists, and small 3D printing businesses that want consistent pricing.</div>
-        </div>
-        <div>
-          <div style="font-weight:700;">Where do I get help?</div>
-          <div style="color:var(--muted); line-height:1.6;">Use the support page button, or email <a href="mailto:post@jhmultiservice.no">post@jhmultiservice.no</a>.</div>
-        </div>
-      </div>
-    </section>
 
-    <footer>
-      <div>© <span id="y"></span> PrintCalc</div>
-      <div>Made by Johansen Multiservice</div>
-    </footer>
-  </div>
+<div class="screenshots">
 
-  <script>
-    // Year
-    document.getElementById("y").textContent = new Date().getFullYear();
+<div class="phone">
+<img src="screen1.png">
+</div>
 
-    // Smart-ish behavior: if opened inside an in-app browser that blocks App Store links,
-    // show a hint to open in Safari (simple, no tracking).
-    (function(){
-      const ua = navigator.userAgent || "";
-      const isFacebookInApp = /FBAN|FBAV|Instagram/.test(ua);
-      if(isFacebookInApp){
-        const p = document.createElement("p");
-        p.className = "fine";
-        p.textContent = "Tip: If the App Store doesn’t open, tap the ••• menu and choose “Open in browser”.";
-        document.querySelector(".ctaRow").after(p);
-      }
-    })();
-    
-    // Change button language for Norwegian users
-(function(){
-  const lang = navigator.language || navigator.userLanguage;
-  const btn = document.getElementById("downloadBtn");
+<div class="phone">
+<img src="screen2.png">
+</div>
 
-  if(lang && lang.startsWith("no")){
-    btn.textContent = "Last ned i App Store";
-  }
-})();
+<div class="phone">
+<img src="screen3.png">
+</div>
 
-  </script>
+</div>
+
+
+<div class="features">
+
+<div class="feature">
+<h3>Accurate pricing</h3>
+<p>Include all real costs like filament, electricity and machine time.</p>
+</div>
+
+<div class="feature">
+<h3>Built for makers</h3>
+<p>Perfect for hobbyists and small 3D printing businesses.</p>
+</div>
+
+<div class="feature">
+<h3>Fast calculations</h3>
+<p>Get professional price estimates in seconds.</p>
+</div>
+
+</div>
+
+
+<div class="cta">
+
+<h2>Know exactly what your prints cost</h2>
+
+<a id="downloadBtn2"
+class="download"
+href="https://apps.apple.com/us/app/printcalc/id6757921539"
+target="_blank">
+Download on the App Store
+</a>
+
+</div>
+
+<footer>
+
+© PrintCalc
+
+</footer>
+
+</div>
+
+<script>
+
+/* Norwegian button for Norwegian users */
+
+const lang=navigator.language||"";
+
+if(lang.startsWith("no")){
+
+document.getElementById("downloadBtn").textContent="Last ned i App Store";
+document.getElementById("downloadBtn2").textContent="Last ned i App Store";
+
+}
+
+</script>
+
 </body>
 </html>
