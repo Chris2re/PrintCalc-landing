@@ -206,8 +206,7 @@
         </ul>
 
         <div class="ctaRow">
-          <a class="btn btnPrimary" id="downloadBtn" href="https://apps.apple.com/us/app/printcalc/id6757921539" target="_blank" rel="noopener">
-            Download on the App Store
+          <a class="btn btnPrimary" id="downloadBtn" href="https://apps.apple.com/us/app/printcalc/id6757921539" target="_blank" rel="noopener"> Download on the App Store
           </a>
           <a class="btn" href="https://chris2re.github.io/printcalc-support/" target="_blank" rel="noopener">
             Support page
@@ -219,10 +218,8 @@
       <div class="card phone">
         <div class="mock" aria-label="App preview">
           <div class="notch" aria-hidden="true"></div>
-          <div class="shot">
-            <div>
-              <div style="font-weight:800;font-size:16px;color:rgba(255,255,255,.78);margin-bottom:6px;">Add screenshots later</div>
-              Drop <b>screen1.jpg</b> here and replace this box with a real app screenshot.
+            <div class="shot">
+              <img src="screen1.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
             </div>
           </div>
         </div>
@@ -284,6 +281,17 @@
         document.querySelector(".ctaRow").after(p);
       }
     })();
+    
+    // Change button language for Norwegian users
+(function(){
+  const lang = navigator.language || navigator.userLanguage;
+  const btn = document.getElementById("downloadBtn");
+
+  if(lang && lang.startsWith("no")){
+    btn.textContent = "Last ned i App Store";
+  }
+})();
+
   </script>
 </body>
 </html>
